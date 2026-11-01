@@ -1,0 +1,29 @@
+<h1>EventSpace</h1>
+
+<p>
+  Сервис поиска и бронирования площадок для мероприятий
+</p>
+
+<h2>Доступные площадки</h2>
+
+<% if @venues.any? %>
+  <% @venues.each do |venue| %>
+    <div>
+      <h3><%= venue.name %></h3>
+
+      <p>
+        <strong>Адрес:</strong>
+        <%= venue.address %>
+      </p>
+
+      <p>
+        <strong>Вместимость:</strong>
+        <%= venue.capacity %> человек
+      </p>
+    </div>
+
+    <hr>
+  <% end %>
+<% else %>
+  <p>Пока площадки не добавлены</p>
+<% end %>
