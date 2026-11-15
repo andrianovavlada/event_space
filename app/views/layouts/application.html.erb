@@ -1,29 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
   <head>
-    <title><%= content_for(:title) || "Event Space" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Event Space">
-    <meta name="mobile-web-app-capable" content="yes">
+    <title><%= content_for(:title) || "EventSpace — бронирование площадок" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173B63">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <div class="container header-content">
+        <%= link_to root_path, class: "brand" do %>
+          <span class="brand-symbol">✦</span>
+          Event<span>Space</span>
+        <% end %>
+
+        <nav class="main-nav" aria-label="Основная навигация">
+          <%= link_to "Главная", root_path, aria: { current: ("page" if current_page?(root_path)) } %>
+          <%= link_to "Площадки", venues_path, aria: { current: ("page" if current_page?(venues_path)) } %>
+          <span class="nav-planned">Мои бронирования</span>
+          <span class="nav-planned">Избранное</span>
+          <span class="nav-planned">О сервисе</span>
+        </nav>
+
+        <div class="header-account" aria-label="Личный кабинет">
+          <button type="button" class="login-placeholder" disabled>Войти</button>
+          <button type="button" class="registration-placeholder" disabled>
+            Регистрация
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <nav class="footer-links" aria-label="Навигация в подвале">
+          <%= link_to "Главная", root_path %>
+          <%= link_to "Каталог площадок", venues_path %>
+        </nav>
+        <div class="footer-copyright">
+          <%= link_to root_path, class: "footer-brand" do %>
+            <span aria-hidden="true">✦</span> EventSpace
+          <% end %>
+          <span><%= Date.current.year %></span>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

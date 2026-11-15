@@ -66,3 +66,4 @@ group :test do
 end
 
 gem "fiddle", "~> 1.1"
+gem "dotenv-rails", groups: [ :development, :test ]
