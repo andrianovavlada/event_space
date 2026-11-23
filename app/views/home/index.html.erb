@@ -1,4 +1,3 @@
-
 <section class="home-hero">
   <div class="container home-hero-inner">
     <h1>Бронирование площадок для любых мероприятий</h1>
@@ -8,39 +7,6 @@
       в удобных и современных пространствах
     </p>
 
-    <div class="hero-search">
-      <%= form_with url: venues_path, method: :get, local: true,
-                    class: "search-form" do |f| %>
-        <div class="search-field">
-          <%= home_icon :pin %>
-          <div class="search-field-content">
-            <%= f.label :city, "Город" %>
-            
-          </div>
-        </div>
-
-        <div class="search-field search-date">
-          <%= home_icon :calendar %>
-          <div class="search-field-content">
-            <span class="search-field-label">Дата мероприятия</span>
-            
-          </div>
-        </div>
-
-        <div class="search-field">
-          <%= home_icon :users %>
-          <div class="search-field-content">
-            <%= f.label :guests, "Количество гостей" %>
-            
-          </div>
-        </div>
-
-        <%= f.button type: "submit", class: "search-button" do %>
-          <%= home_icon :search %>
-          Найти площадку
-        <% end %>
-      <% end %>
-    </div>
   </div>
 </section>
 
@@ -88,40 +54,32 @@
 
     <% if @popular_venues.any? %>
       <div class="home-venues-grid">
-      <% @popular_venues.each do |venue| %>
-        <article class="home-venue-card">
-          <div class="home-venue-photo">
-            <% photo =
-              case venue.name.to_s.downcase
-              when /конференц/
-                "venue-conference.jpg"
-              when /переговор/
-                "venue-meeting.jpg"
-              when /семинар/
-                "venue-seminar.jpg"
-              else
-                "venue-default.jpg"
-              end
-            %>
+        <% @popular_venues.each do |venue| %>
+          <article class="home-venue-card">
+            <div class="venue-card-photo">
+              <%= image_tag venue_photo(venue), alt: "", loading: "lazy", decoding: "async" %>
+            </div>
 
-            <%= image_tag photo, alt: venue.name, loading: "lazy", decoding: "async" %>
-          </div>
-
-          <div class="home-venue-info">
-            <h3><%= venue.name %></h3>
-            <p><%= home_icon :pin %><span><%= venue.address %></span></p>
-            <p><%= home_icon :users %><span>До <%= venue.capacity %> гостей</span></p>
-          </div>
-        </article>
-      <% end %>
+            <div class="home-venue-info">
+              <h3><%= link_to venue.name, venue_path(venue) %></h3>
+              <p class="home-venue-rating">
+                Оценка <%= number_with_precision(venue.average_rating, precision: 2, separator: ",") %> из 5 · Отзывы: <%= venue.review_count %>
+              </p>
+              <p><%= home_icon :pin %><span><%= venue.address.presence || "Адрес уточняется" %></span></p>
+              <p><%= home_icon :users %><span><%= venue_capacity(venue) %></span></p>
+            </div>
+          </article>
+        <% end %>
       </div>
+    <% else %>
+      <p>Рейтинг появится, когда у площадок будут отзывы с оценками.</p>
     <% end %>
 
     <div class="home-cta">
       <div class="home-cta-icon"><%= home_icon :calendar %></div>
       <div class="home-cta-text">
         <h3>Ваше следующее событие начинается здесь</h3>
-        <p>Найдите идельное пространство для вашего мероприятия</p>
+        <p>Найдите идеальное пространство для вашего мероприятия</p>
       </div>
       <%= link_to "Перейти в каталог площадок →", venues_path,
                   class: "home-cta-button" %>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
+    <meta charset="utf-8">
     <title><%= content_for(:title) || "EventSpace — бронирование площадок" %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#173B63">
@@ -22,21 +23,40 @@
         <nav class="main-nav" aria-label="Основная навигация">
           <%= link_to "Главная", root_path, aria: { current: ("page" if current_page?(root_path)) } %>
           <%= link_to "Площадки", venues_path, aria: { current: ("page" if current_page?(venues_path)) } %>
-          <span class="nav-planned">Мои бронирования</span>
-          <span class="nav-planned">Избранное</span>
-          <span class="nav-planned">О сервисе</span>
+          <%= link_to "Мои бронирования", my_bookings_path, aria: { current: ("page" if current_page?(my_bookings_path)) } %>
+          <%= link_to "Избранное", favorites_path, aria: { current: ("page" if current_page?(favorites_path)) } %>
         </nav>
 
         <div class="header-account" aria-label="Личный кабинет">
-          <button type="button" class="login-placeholder" disabled>Войти</button>
-          <button type="button" class="registration-placeholder" disabled>
-            Регистрация
-          </button>
+          <% if logged_in? %>
+            <div class="account-identity">
+              <span class="account-name"><%= current_user.name %></span>
+              <small><%= t("users.roles.#{current_user.role}") %></small>
+            </div>
+
+            <%= button_to "Выйти", logout_path,
+                  method: :delete,
+                  class: "account-button" %>
+          <% else %>
+            <%= link_to "Войти", login_path,
+                  class: "account-button account-button-primary",
+                  aria: { current: ("page" if current_page?(login_path)) } %>
+
+            <%= link_to "Регистрация", signup_path,
+                  class: "account-button account-button-primary",
+                  aria: { current: ("page" if current_page?(signup_path)) } %>
+          <% end %>
         </div>
       </div>
     </header>
 
     <main>
+      <% if notice.present? %>
+        <div class="container flash-message flash-success" role="status">
+          <%= notice %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
 
@@ -44,7 +64,9 @@
       <div class="container footer-content">
         <nav class="footer-links" aria-label="Навигация в подвале">
           <%= link_to "Главная", root_path %>
-          <%= link_to "Каталог площадок", venues_path %>
+          <%= link_to "Площадки", venues_path %>
+          <%= link_to "Мои бронирования", my_bookings_path %>
+          <%= link_to "Избранное", favorites_path %>
         </nav>
         <div class="footer-copyright">
           <%= link_to root_path, class: "footer-brand" do %>

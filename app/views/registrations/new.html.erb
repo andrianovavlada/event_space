@@ -1,0 +1,70 @@
+
+<% content_for :title, "Регистрация — EventSpace" %>
+
+<section class="auth-section">
+  <div class="auth-card">
+    <div class="auth-heading">
+      <h1>Создать аккаунт</h1>
+    </div>
+
+    <%= form_with model: @user, url: signup_path,
+                  class: "auth-form" do |f| %>
+
+      <div class="auth-field">
+        <%= f.label :name, "Ваше имя" %>
+        <%= f.text_field :name,
+              placeholder: "Как к вам обращаться",
+              autocomplete: "name",
+              required: true,
+              minlength: 2,
+              maxlength: 60 %>
+        <% @user.errors[:name].each do |message| %>
+          <small class="field-error"><%= message %></small>
+        <% end %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :email, "Электронная почта" %>
+        <%= f.email_field :email,
+              placeholder: "example@mail.ru",
+              autocomplete: "email",
+              required: true,
+              maxlength: 254 %>
+        <% @user.errors[:email].each do |message| %>
+          <small class="field-error"><%= message %></small>
+        <% end %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password, "Пароль" %>
+        <%= f.password_field :password,
+              placeholder: "Придумайте пароль",
+              autocomplete: "new-password",
+              required: true,
+              minlength: 8,
+              maxlength: 72 %>
+        <% @user.errors[:password].each do |message| %>
+          <small class="field-error"><%= message %></small>
+        <% end %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password_confirmation, "Повторите пароль" %>
+        <%= f.password_field :password_confirmation,
+              placeholder: "Введите пароль повторно",
+              autocomplete: "new-password",
+              required: true %>
+        <% @user.errors[:password_confirmation].each do |message| %>
+          <small class="field-error"><%= message %></small>
+        <% end %>
+      </div>
+
+      <%= f.submit "Зарегистрироваться", class: "auth-submit" %>
+    <% end %>
+
+    <div class="auth-bottom">
+      Уже есть аккаунт?
+      <%= link_to "Войти", login_path %>
+    </div>
+  </div>
+</section>

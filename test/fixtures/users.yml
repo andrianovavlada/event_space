@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  email: one@example.com
+  password_digest: <%= BCrypt::Password.create("Password123", cost: BCrypt::Engine::MIN_COST) %>
+  role: 0
+
+two:
+  name: MyString
+  email: two@example.com
+  password_digest: <%= BCrypt::Password.create("Password123", cost: BCrypt::Engine::MIN_COST) %>
+  role: 1

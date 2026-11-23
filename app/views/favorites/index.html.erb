@@ -1,0 +1,15 @@
+<% content_for :title, "Избранное — EventSpace" %>
+
+<section class="container venue-catalog">
+  <header class="bookings-heading">
+    <h1>Избранное</h1>
+    <%= link_to "Каталог площадок", venues_path, class: "account-button" %>
+  </header>
+  <% if @venues.any? %>
+    <%= render "venues/cards", venues: @venues, filters: {} %>
+  <% else %>
+    <div class="venue-panel">
+      <p>Здесь отображаются понравившиеся Вам площадки</p>
+    </div>
+  <% end %>
+</section>

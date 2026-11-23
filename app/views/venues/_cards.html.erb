@@ -1,0 +1,17 @@
+<div class="venues-grid">
+  <% venues.each do |venue| %>
+    <article class="venue-card">
+      <%= link_to venue_path(venue, filters), class: "venue-catalog-link" do %>
+        <div class="venue-card-photo">
+          <%= image_tag venue_photo(venue), alt: "", loading: "lazy", decoding: "async" %>
+        </div>
+        <div class="venue-card-body">
+          <h2><%= venue.name %></h2>
+          <p><%= home_icon :pin %> <%= venue.city&.name || "Город не указан" %></p>
+          <p><%= home_icon :users %> <%= venue_capacity(venue) %></p>
+        </div>
+      <% end %>
+      <%= render "venues/favorite_button", venue: venue %>
+    </article>
+  <% end %>
+</div>

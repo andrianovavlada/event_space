@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    @popular_venues = Venue.order(:name).limit(3)
+    @popular_venues = Venue.ranked_by_reviews.limit(3)
   end
 end

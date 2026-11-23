@@ -1,0 +1,82 @@
+﻿<% content_for :title, "#{@venue.name} — EventSpace" %>
+
+<div class="venue-page">
+  <article class="container venue-details">
+    <%= link_to "← К каталогу", venues_path(@filters.compact_blank), class: "venue-back-link" %>
+
+    <header class="venue-cover">
+      <%= image_tag venue_photo(@venue), alt: "", class: "venue-cover-photo" %>
+      <%= render "venues/favorite_button", venue: @venue %>
+      <div class="venue-cover-content">
+        <h1><%= @venue.name %></h1>
+        <% if @venue.city %>
+          <p><%= home_icon :pin %> <%= @venue.city.name %></p>
+        <% end %>
+      </div>
+    </header>
+
+    <dl class="venue-facts">
+      <div class="venue-fact">
+        <dt>Стоимость</dt>
+        <dd><%= venue_hourly_rate(@venue) %></dd>
+      </div>
+      <div class="venue-fact">
+        <dt>Вместимость</dt>
+        <dd><%= venue_capacity(@venue) %></dd>
+      </div>
+      <div class="venue-fact">
+        <dt>Адрес</dt>
+        <dd><%= @venue.address.presence || "Адрес уточняется" %></dd>
+      </div>
+    </dl>
+
+    <div class="venue-page-grid">
+      <section class="venue-panel">
+        <h2>О площадке</h2>
+        <%= simple_format(@venue.description.presence || "Описание пока не добавлено.") %>
+      </section>
+
+      <section class="venue-panel venue-calendar">
+        <h2><%= home_icon :calendar %> Свободное время</h2>
+        <% if @venue.availability_configured? %>
+          <p class="venue-calendar-caption">30 дней с <%= @calendar_start.strftime("%d.%m.%Y") %> · МСК</p>
+        <% end %>
+        <% if @calendar.any? %>
+          <dl class="venue-availability" tabindex="0" aria-label="Свободные интервалы по датам">
+            <% @calendar.each do |date, intervals| %>
+              <div class="venue-availability-day">
+                <dt><%= tag.time date.strftime("%d.%m"), datetime: date.iso8601 %></dt>
+                <dd>
+                  <% intervals.each do |start_at, end_at| %>
+                    <span><%= venue_time_interval(date, start_at, end_at) %></span>
+                  <% end %>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+        <% elsif @venue.availability_configured? %>
+          <p>В этом периоде свободного времени нет.</p>
+        <% else %>
+          <p>Календарь площадки ещё не настроен.</p>
+        <% end %>
+      </section>
+
+      <section class="venue-panel">
+        <h2>Отзывы</h2>
+        <% if @reviews.any? %>
+          <ul class="venue-reviews">
+            <% @reviews.each do |review| %>
+              <li>
+                <strong><%= review.user.name %></strong>
+                <span>Оценка: <%= review.rating %> из 5</span>
+                <%= simple_format(review.body) %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>Отзывов пока нет.</p>
+        <% end %>
+      </section>
+    </div>
+  </article>
+</div>

@@ -1,0 +1,10 @@
+<% selected = favorite_venue?(venue) %>
+<% label = selected ? "Убрать из избранного" : "Добавить в избранное" %>
+<%= button_to venue_favorite_path(venue),
+              method: selected ? :delete : :post,
+              form_class: "venue-favorite",
+              class: class_names("venue-favorite-button", "is-favorite" => selected),
+              aria: { label: "#{label}: #{venue.name}", pressed: selected.to_s },
+              title: label do %>
+  <span aria-hidden="true"><%= selected ? "♥" : "♡" %></span>
+<% end %>

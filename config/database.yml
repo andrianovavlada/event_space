@@ -90,6 +90,8 @@ test:
 production:
   primary: &primary_production
     <<: *default
+    # При запуске в контейнере PostgreSQL может находиться на другом хосте.
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
     database: event_space_production
     username: event_space
     password: <%= ENV["EVENT_SPACE_DATABASE_PASSWORD"] %>

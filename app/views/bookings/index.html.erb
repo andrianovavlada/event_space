@@ -1,0 +1,47 @@
+<% content_for :title, "Мои бронирования — EventSpace" %>
+
+<section class="container bookings-page">
+  <header class="bookings-heading">
+    <h1>Мои бронирования</h1>
+    <%= link_to "Каталог площадок", venues_path, class: "account-button" %>
+  </header>
+
+  <% if @bookings.any? %>
+    <div class="bookings-list">
+      <% @bookings.each do |booking| %>
+        <article class="venue-panel booking-card">
+          <header class="booking-card-heading">
+            <h2><%= link_to booking.venue.name, venue_path(booking.venue) %></h2>
+            <span class="booking-status booking-status--<%= booking.status %>">
+              <%= t("bookings.statuses.#{booking.status}") %>
+            </span>
+          </header>
+          <dl class="booking-details">
+            <div>
+              <dt>Начало (МСК)</dt>
+              <dd><%= tag.time booking.start_at.strftime("%d.%m.%Y, %H:%M"), datetime: booking.start_at.iso8601 %></dd>
+            </div>
+            <div>
+              <dt>Окончание (МСК)</dt>
+              <dd><%= tag.time booking.end_at.strftime("%d.%m.%Y, %H:%M"), datetime: booking.end_at.iso8601 %></dd>
+            </div>
+            <div>
+              <dt>Адрес</dt>
+              <dd><%= booking.venue.address.presence || "Адрес уточняется" %></dd>
+            </div>
+          </dl>
+          <% if booking.review %>
+            <div class="booking-review">
+              <strong>Ваш отзыв · <%= booking.review.rating %> из 5</strong>
+              <p><%= booking.review.body %></p>
+            </div>
+          <% end %>
+        </article>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="venue-panel">
+      <p>У вас пока нет бронирований.</p>
+    </div>
+  <% end %>
+</section>
